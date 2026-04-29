@@ -37,5 +37,10 @@ namespace Consume_API.Controllers
             }
             return View(data);
         }
+        public IActionResult AddCustomer()
+        {
+            Customer cust = new Customer();
+            return View(cust);
+        }
     }
 }
