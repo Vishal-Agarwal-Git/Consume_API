@@ -5,6 +5,7 @@ using System.Data;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 
 namespace Consume_API.Controllers
 {
@@ -123,11 +124,11 @@ namespace Consume_API.Controllers
                 client.BaseAddress = new Uri(localURL);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = client.GetAsync("/Customer/GetCustomerById/" + id).Result();
+                HttpResponseMessage response = client.GetAsync("/Customer/GetCustomerById/" + id).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string stringData = response.Content.ReadAsStringAsync().Result;
-                    cust = System.Text.Json.JsonSerializer.Deserialize<Customer>(stringData, new JsonSerializerOptions() { PropertyNameCaseInensitive = true });
+                    cust = System.Text.Json.JsonSerializer.Deserialize<Customer>(stringData, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 }
                 else
                 {
