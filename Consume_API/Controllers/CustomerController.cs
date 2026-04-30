@@ -150,7 +150,7 @@ namespace Consume_API.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string stringData = response.Content.ReadAsStringAsync().Result;
-                    cust = System Text.Json.JsonSerializer.Deserialize<Customer>(stringData, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                    cust = System.Text.Json.JsonSerializer.Deserialize<Customer>(stringData, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 }
                 else
                 {
