@@ -1,7 +1,9 @@
 ﻿using Consume_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Data;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace Consume_API.Controllers
 {
@@ -41,6 +43,62 @@ namespace Consume_API.Controllers
         {
             Customer cust = new Customer();
             return View(cust);
+        }
+
+        [HttpPost]
+        public IActionResult AddCustomer(Customer model)
+        {
+            try
+            {
+                if(!ModelState.IsValid)
+                {
+                    using(HttpClient client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(localURL);
+                        var data = JsonConvert.SerializeObject(model);
+                        var contentData = new StringContent(data, Encoding.UTF8, "application/json");
+                        if(model.Id == 0)
+                        {
+                            HttpResponseMessage response = client.PostAsync("/Customer/AddCustomer", contentData).Result;
+                            if (response.IsSuccessStatusCode)
+                            {
+                                TempData["success"] = response.Content.ReadAsStringAsync().Result; ;
+                            }
+                            else
+                            {
+                                TempData["error"] = $"{response.ReasonPhrase}";
+                            }
+                        }
+                        else
+                        {
+                            HttpResponseMessage response = client.PutAsync("/Customer/UpdateCustomer", contentData).Result;
+                            if (response.IsSuccessStatusCode)
+                            {
+                                TempData["success"] = response.Content.ReadAsStringAsync().Result;
+                            }
+                            else
+                            {
+                                TempData["error"] = $"{response.ReasonPhrase}";
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "ModelState Is Not Valid!");
+                    return View(model);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete()
+        {
+
         }
     }
 }
