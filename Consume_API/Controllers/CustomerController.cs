@@ -137,5 +137,27 @@ namespace Consume_API.Controllers
             }
             return View("AddCustomer", cust);
         }
+
+        public IActionResult Details(int id)
+        {
+            Customer cust = new Customer();
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(localURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = client.GetAsync("/Customer/GetCustometById/" + id).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string stringData = response.Content.ReadAsStringAsync().Result;
+                    cust = System Text.Json.JsonSerializer.Deserialize<Customer>(stringData, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                }
+                else
+                {
+                    TempData["error"] = $"{response.ReasonPhrase}";
+                }
+            }
+            return View("Details", cust);
+        }
     }
 }
