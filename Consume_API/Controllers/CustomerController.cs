@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Consume_API.Controllers
@@ -96,9 +97,44 @@ namespace Consume_API.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete()
+        public IActionResult Delete(int id)
         {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(localURL);
+                HttpResponseMessage response = client.DeleteAsync("/Customer/DeleteCustomer/" + id).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["success"] = response.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    TempData["error"] = $"{response.ReasonPhrase}";
+                }
+            }
+            return RedirectToAction("Index");
+        }
 
+        public IActionResult Edit(int id)
+        {
+            Customer cust = new Customer();
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(localURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = client.GetAsync("/Customer/GetCustomerById/" + id).Result();
+                if (response.IsSuccessStatusCode)
+                {
+                    string stringData = response.Content.ReadAsStringAsync().Result;
+                    cust = System.Text.Json.JsonSerializer.Deserialize<Customer>(stringData, new JsonSerializerOptions() { PropertyNameCaseInensitive = true });
+                }
+                else
+                {
+                    TempData["error"] = $"{response.ReasonPhrase}";
+                }
+            }
+            return View("AddCustomer", cust);
         }
     }
 }
