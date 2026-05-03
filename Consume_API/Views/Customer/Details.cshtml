@@ -1,0 +1,38 @@
+﻿@model Consume_API.Models.Customer
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3 border border-dark p-4 rounded rounded-top">
+            <form method="get" asp-action="Details">
+                <table>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Id)</td>
+                        <td>@Html.DisplayFor(model => model.Id)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Name)</td>
+                        <td>@Html.DisplayFor(Model => Model.Name)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(Model => Model.Gender)</td>
+                        <td>@Html.DisplayFor(Model => Model.Gender)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(Model => Model.IsActive)</td>
+                        <td>@Html.DisplayFor(Model => Model.IsActive)</td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" asp-action="Edit" asp-route-id="@Model?.Id" value="Edit" /></td>
+                        <td><input type="submit" asp-action="Index" value="Back to list" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+        
+        

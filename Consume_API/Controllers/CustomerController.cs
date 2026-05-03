@@ -6,12 +6,14 @@ using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace Consume_API.Controllers
 {
     public class CustomerController : Controller
     {
-        private string localURL = "https://localhost:7192/swagger/index.html";
+        
+        private string localURL = "https://localhost:7047/swagger/index.html";
         public IActionResult Index()
         {
             List<Customer> data = new List<Customer>();
