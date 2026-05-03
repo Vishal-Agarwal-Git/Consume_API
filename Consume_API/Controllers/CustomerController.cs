@@ -12,8 +12,8 @@ namespace Consume_API.Controllers
 {
     public class CustomerController : Controller
     {
-        
         private string localURL = "https://localhost:7047/swagger/index.html";
+
         public IActionResult Index()
         {
             List<Customer> data = new List<Customer>();
